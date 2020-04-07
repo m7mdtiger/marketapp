@@ -38,5 +38,8 @@ class UserSeeder extends Seeder
         $someAdmin->roles()->attach($admin);
         $someAdmin->permissions()->attach($editSettings);
         $someAdmin->permissions()->attach($manageShops);
+
+        // Attach permission to a role.
+        $shopOwner->permissions()->attach($manageShop);
     }
 }
