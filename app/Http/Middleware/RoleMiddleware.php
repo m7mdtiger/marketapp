@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Closure;
 
 class RoleMiddleware
@@ -13,16 +16,20 @@ class RoleMiddleware
      * @param null $permission
      * @return mixed
      */
-    public function handle($request, Closure $next, $role, $permission = null)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        if(!auth()->user()->hasRole($role)) {
-            abort(404);
+
+        if (Auth::guard($guard)->guest()) {
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->guest("shops/index");
+            }
+        } elseif (!Auth::user()->hasRole("Admin")) {
+            return redirect()->to('/')->withError('Permission Denied');
         }
-        if($permission !== null && !auth()->user()->can($permission)) {
-            abort(404);
-        }
+
+
         return $next($request);
     }
 }
-
-?>

@@ -36,8 +36,8 @@ Route::get('shops/index', 'ShopsController@index');
 //
 // Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => 'role:admin'], function() {
-   Route::get('/shops/edit', function() {
-      return 'Welcome Admin to the edit page';
-   });
+Route::group(['middleware' => 'role'], function () {
+    Route::get('/shops/edit', function () {
+        return 'Welcome Admin to the edit page';
+    });
 });
